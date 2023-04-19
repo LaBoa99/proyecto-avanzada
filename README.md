@@ -26,6 +26,12 @@ El programa se dividira en dos partes en una donde se contendra la aplicacion en
 la otra parte seria un **backend** realizado en **Flask** en donde este tendra la tarea de CRUD para interactuar con la base de datos en **SQLITE**.
 Esto se realizo para que se notara la importancia del patron de diseño MVC.
 
+## Dependencias
+
+    - PyQT6
+    - SQLite 3.41.2
+    - Flask 2.2.4
+
 ### Miembros del equipo
 
     - Claudio Gael Rodriguez Vega
