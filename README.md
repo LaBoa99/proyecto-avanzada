@@ -23,14 +23,15 @@ Carreras ---|contiene| Materias["MATERIAS"]
 ## Arquitectura
 
 El programa se dividira en dos partes en una donde se contendra la aplicacion en **PyQT6** con un patron de diseño MVC y
-la otra parte seria un **backend** realizado en **Flask** en donde este tendra la tarea de CRUD para interactuar con la base de datos en **SQLITE**.
+la otra parte seria un **backend** realizado en **Flask** en donde este tendra la tarea de CRUD para interactuar con la base de datos en **MariaDB**.
 Esto se realizo para que se notara la importancia del patron de diseño MVC.
 
 ## Dependencias
 
     - PyQT6
-    - SQLite 3.41.2
+    - MARIADB 10.10
     - Flask 2.2.4
+    - PyMySQL 1.0.3
 
 ### Miembros del equipo
 
