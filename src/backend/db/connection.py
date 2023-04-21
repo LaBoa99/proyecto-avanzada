@@ -9,13 +9,7 @@ class MariaDB:
             raise Exception(
                 "Esta clase es un Singleton. Use el método get_instance() para obtener una instancia."
             )
-        self.conn = pymysql.connect(
-            host="localhost",
-            user="usuario",
-            password="contraseña",
-            database="nombre_base_de_datos",
-            cursorclass=pymysql.cursors.DictCursor,
-        )
+        self.conn = self.connect()
         MariaDB.__instance = self
 
     @staticmethod
@@ -23,6 +17,18 @@ class MariaDB:
         if MariaDB.__instance is None:
             MariaDB()
         return MariaDB.__instance
+    
+    def connect(self):
+        return pymysql.connect(
+            host="localhost",
+            user="root",
+            password="admin",
+            database="siau",
+            cursorclass=pymysql.cursors.DictCursor,
+        )
 
     def get_connection(self):
-        return self.conn
+        if self.conn.open:
+            return self.conn
+        self.conn = self.connect()
+        return  self.conn
