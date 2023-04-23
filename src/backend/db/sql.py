@@ -5,16 +5,46 @@ from functools import wraps
 
 class Sql:
     @staticmethod
-    def readAll(instance, *columns, **options):
+    def readAll(instance: str, *columns, **options):
         query = Sql.__prepare_read_query(instance, *columns, **options)
         with Sql.__execute(query=query) as cursor:
             return {f"{instance}": cursor.fetchall()}
 
     @staticmethod
-    def readOne(instance, *columns, **options):
+    def readOne(instance: str, *columns, **options):
         query = Sql.__prepare_read_query(instance, *columns, **options)
         with Sql.__execute(query=query) as cursor:
             return {f"{instance}": cursor.fetchone()}
+
+    @staticmethod
+    def destroy(instance: str, id: int):
+        query = f"DELETE FROM {instance} WHERE id = '{id}'"
+        with Sql.__execute(query=query) as cursor:
+            return {"msg": f"ENTIDAD {instance} ELIMINADA #{id}"}
+
+    @staticmethod
+    def update(instance: str, columns: list[str], update_values, where_values):
+        query = f"UPDATE {instance} SET {', '.join([f'{col} = %s' for col in columns])} WHERE {', '.join([f'{col} = %s' for col in where_values.keys()])}"
+        print(query)
+        with Sql.__get_conexion() as conexion:
+            conexion.begin()
+            cursor: cursors.Cursor = conexion.cursor()
+            with cursor:
+                for values in update_values:
+                    cursor.execute(query, values)
+                conexion.commit()
+
+    @staticmethod
+    def create(instance: str, columns: list[str], insert_values):
+        query = f"INSERT INTO {instance} ({','.join(columns)}) VALUES ({','.join(['%s'] * len(columns))})"
+        print(query)
+        with Sql.__get_conexion() as conexion:
+            conexion.begin()
+            cursor: cursors.Cursor = conexion.cursor()
+            with cursor:
+                for values in insert_values:
+                    cursor.execute(query, values)
+                conexion.commit()
 
     # Utils
 
@@ -26,6 +56,13 @@ class Sql:
 
         query = f"SELECT {cols} FROM {instance}"
         return query
+
+    @staticmethod
+    @MariaDB.obtener_conexion()
+    def __get_conexion(conexion=None) -> Connection:
+        if conexion != None:
+            return conexion
+        raise ConnectionError("NO hay conexion a la base de datos")
 
     @staticmethod
     @MariaDB.obtener_conexion()
