@@ -1,9 +1,11 @@
 from flask import Blueprint, jsonify, request
 from utils.entity import Entity
 from utils.validators import Validators
+from utils.routes import Route
+from controllers.controller import IController
 
 
-class MateriaController(Entity):
+class MateriaController(Entity, IController):
     columns = {
         "id": {"type": int, "optional": True},
         "NRC": Validators.genCol(str),
@@ -20,34 +22,38 @@ class MateriaController(Entity):
 
     @staticmethod
     @Validators.validate_query_params(columns)
-    def getMaterias():
+    def getAll():
         controller = MateriaController()
         materias = controller.findAll()
         return jsonify({"date": materias})
 
     @staticmethod
     @Validators.validate_query_params(columns)
-    def getMateria():
+    def getOne():
         controller = MateriaController()
         materias = controller.findOne(getattr(request, "query_config"))
         return jsonify({"data": materias})
 
     @staticmethod
     @Validators.validate_resquest_body(columns)
-    def addMateria():
+    def add():
         controller = MateriaController()
         materias = controller.create(request.data)
         return jsonify({"data": materias})
 
     @staticmethod
     @Validators.validate_resquest_body(columns, update=True)
-    def updateMateria(id: int):
+    def updateWithID(id: int):
         controller = MateriaController()
         materia = controller.update(id, request.date)
         return jsonify({"data": materia})
 
     @staticmethod
-    def destroyMateria(id: int):
+    def destroyWithID(id: int):
         controller = MateriaController()
         msg = controller.destroy(id)
         return jsonify(msg)
+
+
+materia_blueprint = Blueprint("materias", __name__)
+Route.registerCRUD(materia_blueprint, MateriaController, "materia")

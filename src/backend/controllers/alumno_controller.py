@@ -1,9 +1,11 @@
 from flask import Blueprint, jsonify, request
 from utils.entity import Entity
 from utils.validators import Validators
+from utils.routes import Route
+from controllers.controller import IController
 
 
-class AlumnoController(Entity):
+class AlumnoController(Entity, IController):
     columns = {
         "id": {"type": int, "optional": True},
         "codigo": Validators.genCol(int),
@@ -18,34 +20,38 @@ class AlumnoController(Entity):
 
     @staticmethod
     @Validators.validate_query_params(columns)
-    def getAlumnos():
+    def getAll():
         controller = AlumnoController()
         alumnos = controller.findAll()
         return jsonify({"date": alumnos})
 
     @staticmethod
     @Validators.validate_query_params(columns)
-    def getAlumno():
+    def getOne():
         controller = AlumnoController()
         alumnos = controller.findOne(getattr(request, "query_config"))
         return jsonify({"data": alumnos})
 
     @staticmethod
     @Validators.validate_resquest_body(columns)
-    def addAlumno():
+    def add():
         controller = AlumnoController()
         alumnos = controller.create(request.data)
         return jsonify({"data": alumnos})
 
     @staticmethod
     @Validators.validate_resquest_body(columns, update=True)
-    def updateAlumno(id: int):
+    def updateWithID(id: int):
         controller = AlumnoController()
         alumno = controller.update(id, request.date)
         return jsonify({"data": alumno})
 
     @staticmethod
-    def destroyAlumno(id: int):
+    def destroyWithID(id: int):
         controller = AlumnoController()
         msg = controller.destroy(id)
         return jsonify(msg)
+
+
+alumno_blueprint = Blueprint("alumnos", __name__)
+Route.registerCRUD(alumno_blueprint, AlumnoController, "alumno")

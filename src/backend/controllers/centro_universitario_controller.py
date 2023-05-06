@@ -1,9 +1,11 @@
 from flask import Blueprint, jsonify, request
 from utils.entity import Entity
 from utils.validators import Validators
+from utils.routes import Route
+from controllers.controller import IController
 
 
-class CentroUniversitarioController(Entity):
+class CentroUniversitarioController(Entity, IController):
     columns = {
         "id": {"type": int, "optional": True},
         "nombre": Validators.genCol(str),
@@ -19,34 +21,40 @@ class CentroUniversitarioController(Entity):
 
     @staticmethod
     @Validators.validate_query_params(columns)
-    def getCentroUniversitarios():
+    def getAll():
         controller = CentroUniversitarioController()
         centros_universitarios = controller.findAll()
         return jsonify({"date": centros_universitarios})
 
     @staticmethod
     @Validators.validate_query_params(columns)
-    def getCentroUniversitario():
+    def getOne():
         controller = CentroUniversitarioController()
         centros_universitarios = controller.findOne(getattr(request, "query_config"))
         return jsonify({"data": centros_universitarios})
 
     @staticmethod
     @Validators.validate_resquest_body(columns)
-    def addCentroUniversitario():
+    def add():
         controller = CentroUniversitarioController()
         centros_universitarios = controller.create(request.data)
         return jsonify({"data": centros_universitarios})
 
     @staticmethod
     @Validators.validate_resquest_body(columns, update=True)
-    def updateCentroUniversitario(id: int):
+    def updateWithID(id: int):
         controller = CentroUniversitarioController()
         centro_universitario = controller.update(id, request.date)
         return jsonify({"data": centro_universitario})
 
     @staticmethod
-    def destroyCentroUniversitario(id: int):
+    def destroyWithID(id: int):
         controller = CentroUniversitarioController()
         msg = controller.destroy(id)
         return jsonify(msg)
+
+
+centro_universitario_blueprint = Blueprint("centro_univeresitarios", __name__)
+Route.registerCRUD(
+    centro_universitario_blueprint, CentroUniversitarioController, "centroUniversitario"
+)
