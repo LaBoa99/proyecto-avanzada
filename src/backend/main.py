@@ -1,6 +1,6 @@
 from flask import Flask, jsonify
 
-from hello_controller import hello_blueprint
+from controllers.hello_controller import hello_blueprint
 
 
 app = Flask(__name__)

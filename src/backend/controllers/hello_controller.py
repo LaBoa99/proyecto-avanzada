@@ -15,10 +15,10 @@ class HelloController(Entity):
     }
 
     def __init__(self):
-        super().__init__("profesores", HelloController.columns)
+        super().__init__("hello", HelloController.columns)
 
     @staticmethod
-    @Validators.validate_response(columns)
+    @Validators.validate_resquest_body(columns)
     @Validators.validate_query_params(columns)
     def hello():
         controller = HelloController()

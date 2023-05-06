@@ -1,10 +1,13 @@
+from utils.validators import Validators
 from db.sql import Sql
+from typing import Dict, Any
 
 
 class Entity:
-    def __init__(self, instance_name: str, columns: dict):
+    def __init__(self, instance_name: str, columns: Dict[str, Any]):
         self.instance_name = instance_name
         self.columns = columns
+        self.columns_names = list(columns.keys())
 
     def get_columns(self):
         return self.columns
@@ -30,11 +33,13 @@ class Entity:
             )
         return Sql.readAll(self.instance_name)
 
-    def create(self, query_config):
-        pass
+    def create(self, data):
+        return Sql.create(self.instance_name, self.columns_names, data)
 
-    def update(self, query_config):
-        pass
+    def update(self, id: int, data):
+        if Validators.check_id(id):
+            return Sql.update(self.instance_name, self.columns_names, data, {"id": id})
 
     def destroy(self, id: int):
-        pass
+        if Validators.check_id(id):
+            return Sql.destroy(self.instance_name, id)

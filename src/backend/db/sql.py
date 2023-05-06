@@ -31,23 +31,26 @@ class Sql:
             cursor: cursors.Cursor = conexion.cursor()
             with cursor:
                 for values in update_values:
-                    cursor.execute(query, values)
+                    cursor.execute(query, values + where_values.values())
+                    pass
                 conexion.commit()
 
     @staticmethod
-    def create(instance: str, columns: list[str], insert_values):
+    def create(instance: str, columns: list[str], insert_values) -> list[int]:
         query = f"INSERT INTO {instance} ({','.join(columns)}) VALUES ({','.join(['%s'] * len(columns))})"
         print(query)
+        last_ids = []
         with Sql.__get_conexion() as conexion:
             conexion.begin()
             cursor: cursors.Cursor = conexion.cursor()
             with cursor:
                 for values in insert_values:
                     cursor.execute(query, values)
+                    last_ids.append(cursor.lastrowid)
                 conexion.commit()
+        return last_ids
 
     # Utils
-
     @staticmethod
     def __prepare_read_query(instance, *columns, **options):
         cols = "*"

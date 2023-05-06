@@ -26,6 +26,16 @@ from flask import jsonify, request
 
 class Validators:
     @staticmethod
+    def genCol(type, optional=False):
+        return {"type": type, "optional": optional}
+
+    @staticmethod
+    def check_id(id):
+        if isinstance(id, int) and id > 0:
+            return True
+        raise BadRequest("No correct ID")
+
+    @staticmethod
     def validate_query_params(columns: list[str] | dict):
         def decorator(f):
             @wraps(f)
@@ -83,7 +93,7 @@ class Validators:
         return decorator
 
     @staticmethod
-    def validate_response(properties):
+    def validate_resquest_body(properties, update=False):
         def decorator(f):
             @wraps(f)
             def wrapper(*args, **kwargs):
@@ -97,9 +107,10 @@ class Validators:
                         )
                     for key, value in request.items():
                         if key not in template and not template[key]["optional"]:
-                            raise BadRequest(
-                                f'la propiedad "{key}" no esta presente en la respuesta'
-                            )
+                            if not update:
+                                raise BadRequest(
+                                    f'la propiedad "{key}" no esta presente en la respuesta'
+                                )
                         if type(value) != template[key]["type"]:
                             raise BadRequest(f'la propeida "{key} noe s del mismo tipo')
                         if type(value) == dict:
