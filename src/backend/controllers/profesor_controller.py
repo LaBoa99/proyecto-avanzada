@@ -22,13 +22,13 @@ class ProfesorController(Entity, IController):
     def getAll():
         controller = ProfesorController()
         profesores = controller.findAll()
-        return jsonify({"date": profesores})
+        return jsonify({"data": profesores})
 
     @staticmethod
     @Validators.validate_query_params(columns)
-    def getOne():
+    def getOne(id):
         controller = ProfesorController()
-        profesores = controller.findOne(getattr(request, "query_config"))
+        profesores = controller.findOne(id, getattr(request, "query_config"))
         return jsonify({"data": profesores})
 
     @staticmethod
@@ -42,7 +42,7 @@ class ProfesorController(Entity, IController):
     @Validators.validate_resquest_body(columns, update=True)
     def updateWithID(id: int):
         controller = ProfesorController()
-        profesor = controller.update(id, request.date)
+        profesor = controller.update(id, request.data)
         return jsonify({"data": profesor})
 
     @staticmethod

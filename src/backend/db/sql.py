@@ -11,8 +11,8 @@ class Sql:
             return {f"{instance}": cursor.fetchall()}
 
     @staticmethod
-    def readOne(instance: str, *columns, **options):
-        query = Sql.__prepare_read_query(instance, *columns, **options)
+    def readOne(instance: str, id):
+        query = f"SELECT * FROM {instance} WHERE ID = {id}"
         with Sql.__execute(query=query) as cursor:
             return {f"{instance}": cursor.fetchone()}
 

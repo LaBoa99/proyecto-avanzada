@@ -46,6 +46,7 @@ class Validators:
 
                 params = list(request.args.keys())
                 if len(params) == 0:
+                    setattr(request, "query_config", {})
                     return f(*args, **kwargs)
 
                 if not allowed_keys.issuperset(set(params)):
@@ -86,6 +87,7 @@ class Validators:
                     if len(tempOrderBy) > 0:
                         query_config["order"] = tempOrderBy
                 setattr(request, "query_config", query_config)
+                print("XD")
                 return f(*args, **kwargs)
 
             return wrapper

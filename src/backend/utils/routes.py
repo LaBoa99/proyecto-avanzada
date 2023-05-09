@@ -4,11 +4,12 @@ from flask import Blueprint, jsonify, request
 class Route:
     @staticmethod
     def registerCRUD(blue_print: Blueprint, controller, instance: str):
-        blue_print.add_url_rule("/", "", controller.getAll, methods=["GET"])
         blue_print.add_url_rule(
-            "/<int:id>", instance + "/alumno", controller.getOne, methods=["GET"]
+            "/<int:id>", instance, controller.getOne, methods=["GET"]
         )
-        blue_print.add_url_rule("/", instance + "", controller.add, methods=["POST"])
+        blue_print.add_url_rule(
+            "/", instance + "/create", controller.add, methods=["POST"]
+        )
         blue_print.add_url_rule(
             "/<int:id>", instance + "/update", controller.updateWithID, methods=["PUT"]
         )
@@ -18,3 +19,4 @@ class Route:
             controller.destroyWithID,
             methods=["DELETE"],
         )
+        blue_print.add_url_rule("/", "", controller.getAll, methods=["GET"])

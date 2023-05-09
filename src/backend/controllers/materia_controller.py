@@ -25,13 +25,13 @@ class MateriaController(Entity, IController):
     def getAll():
         controller = MateriaController()
         materias = controller.findAll()
-        return jsonify({"date": materias})
+        return jsonify({"data": materias})
 
     @staticmethod
     @Validators.validate_query_params(columns)
-    def getOne():
+    def getOne(id):
         controller = MateriaController()
-        materias = controller.findOne(getattr(request, "query_config"))
+        materias = controller.findOne(id, getattr(request, "query_config"))
         return jsonify({"data": materias})
 
     @staticmethod
@@ -45,7 +45,7 @@ class MateriaController(Entity, IController):
     @Validators.validate_resquest_body(columns, update=True)
     def updateWithID(id: int):
         controller = MateriaController()
-        materia = controller.update(id, request.date)
+        materia = controller.update(id, request.data)
         return jsonify({"data": materia})
 
     @staticmethod

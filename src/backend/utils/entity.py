@@ -24,14 +24,14 @@ class Entity:
             )
         return Sql.readAll(self.instance_name)
 
-    def findOne(self, query_config):
+    def findOne(self, id, query_config):
         if len(query_config.keys()):
             return Sql.readAll(
                 self.instance_name,
                 query_config["select"] if "select" in query_config else [],
                 options=query_config,
             )
-        return Sql.readAll(self.instance_name)
+        return Sql.readOne(self.instance_name, id)
 
     def create(self, data):
         return Sql.create(self.instance_name, self.columns_names, data)

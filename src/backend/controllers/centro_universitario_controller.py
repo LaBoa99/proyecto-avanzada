@@ -24,13 +24,15 @@ class CentroUniversitarioController(Entity, IController):
     def getAll():
         controller = CentroUniversitarioController()
         centros_universitarios = controller.findAll()
-        return jsonify({"date": centros_universitarios})
+        return jsonify({"data": centros_universitarios})
 
     @staticmethod
     @Validators.validate_query_params(columns)
-    def getOne():
+    def getOne(id):
         controller = CentroUniversitarioController()
-        centros_universitarios = controller.findOne(getattr(request, "query_config"))
+        centros_universitarios = controller.findOne(
+            id, getattr(request, "query_config")
+        )
         return jsonify({"data": centros_universitarios})
 
     @staticmethod
@@ -44,7 +46,7 @@ class CentroUniversitarioController(Entity, IController):
     @Validators.validate_resquest_body(columns, update=True)
     def updateWithID(id: int):
         controller = CentroUniversitarioController()
-        centro_universitario = controller.update(id, request.date)
+        centro_universitario = controller.update(id, request.data)
         return jsonify({"data": centro_universitario})
 
     @staticmethod

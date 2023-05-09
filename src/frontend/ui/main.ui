@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SIAU</class>
+ <widget class="QMainWindow" name="SIAU">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1043</width>
+    <height>673</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="QTableWidget" name="table"/>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1043</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuEntidades">
+    <property name="title">
+     <string>Entidades</string>
+    </property>
+    <addaction name="actionAlumnos"/>
+    <addaction name="actionCarreras"/>
+    <addaction name="actionCentros_Universitarios"/>
+    <addaction name="actionMaterias"/>
+    <addaction name="actionProfesores"/>
+    <addaction name="separator"/>
+    <addaction name="actionCreditos"/>
+   </widget>
+   <addaction name="menuEntidades"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionAlumnos">
+   <property name="text">
+    <string>Alumnos</string>
+   </property>
+  </action>
+  <action name="actionCarreras">
+   <property name="text">
+    <string>Carreras</string>
+   </property>
+  </action>
+  <action name="actionCentros_Universitarios">
+   <property name="text">
+    <string>Centros Universitarios</string>
+   </property>
+  </action>
+  <action name="actionMaterias">
+   <property name="text">
+    <string>Materias</string>
+   </property>
+  </action>
+  <action name="actionProfesores">
+   <property name="text">
+    <string>Profesores</string>
+   </property>
+  </action>
+  <action name="actionCreditos">
+   <property name="text">
+    <string>Creditos</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

@@ -14,20 +14,20 @@ class CarreraController(Entity, IController):
     }
 
     def __init__(self):
-        super().__init__("Carreras", CarreraController.columns)
+        super().__init__("carreras", CarreraController.columns)
 
     @staticmethod
     @Validators.validate_query_params(columns)
     def getAll():
         controller = CarreraController()
         carreras = controller.findAll()
-        return jsonify({"date": carreras})
+        return jsonify({"data": carreras})
 
     @staticmethod
     @Validators.validate_query_params(columns)
-    def getOne():
+    def getOne(id):
         controller = CarreraController()
-        carreras = controller.findOne(getattr(request, "query_config"))
+        carreras = controller.findOne(id, getattr(request, "query_config"))
         return jsonify({"data": carreras})
 
     @staticmethod
@@ -41,7 +41,7 @@ class CarreraController(Entity, IController):
     @Validators.validate_resquest_body(columns, update=True)
     def updateWithID(id: int):
         controller = CarreraController()
-        carrera = controller.update(id, request.date)
+        carrera = controller.update(id, request.data)
         return jsonify({"data": carrera})
 
     @staticmethod
