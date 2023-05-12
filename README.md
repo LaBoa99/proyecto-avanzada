@@ -36,3 +36,4 @@ Esto se realizo para que se notara la importancia del patron de diseño MVC.
 ### Miembros del equipo
 
     - Claudio Gael Rodriguez Vega
+    -Christopher Noe Meza Garcia
