@@ -10,6 +10,20 @@ class SiauController:
 
     def connect_signals(self):
         self.view.onOptionEvent.connect(self.change_table)
+        self.view.onCreateItemEvent.connect(self.create)
+        self.view.onUpdateItemEvent.connect(self.update)
+        self.view.onDeleteItemEvent.connect(self.delete)
+
+    def create(self, data):
+        result = self.model.rowToDict(data)
+        self.model.service.create(result)
+        pass
+
+    def update(self, id, data):
+        pass
+
+    def delete(self, id):
+        pass
 
     def change_table(self, option: INSTANCES_SIAU):
         if option == INSTANCES_SIAU.CREDITOS:

@@ -34,14 +34,14 @@ class CarreraController(Entity, IController):
     @Validators.validate_resquest_body(columns)
     def add():
         controller = CarreraController()
-        carreras = controller.create(request.data)
+        carreras = controller.create(request.get_json())
         return jsonify({"data": carreras})
 
     @staticmethod
     @Validators.validate_resquest_body(columns, update=True)
     def updateWithID(id: int):
         controller = CarreraController()
-        carrera = controller.update(id, request.data)
+        carrera = controller.update(id, request.get_json())
         return jsonify({"data": carrera})
 
     @staticmethod

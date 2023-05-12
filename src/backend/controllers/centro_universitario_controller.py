@@ -39,14 +39,14 @@ class CentroUniversitarioController(Entity, IController):
     @Validators.validate_resquest_body(columns)
     def add():
         controller = CentroUniversitarioController()
-        centros_universitarios = controller.create(request.data)
+        centros_universitarios = controller.create(request.get_json())
         return jsonify({"data": centros_universitarios})
 
     @staticmethod
     @Validators.validate_resquest_body(columns, update=True)
     def updateWithID(id: int):
         controller = CentroUniversitarioController()
-        centro_universitario = controller.update(id, request.data)
+        centro_universitario = controller.update(id, request.get_json())
         return jsonify({"data": centro_universitario})
 
     @staticmethod

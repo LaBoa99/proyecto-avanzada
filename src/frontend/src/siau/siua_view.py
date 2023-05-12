@@ -24,15 +24,16 @@ from PyQt6.QtWidgets import (
 class SiauView(QWidget):
     onOptionEvent = pyqtSignal(INSTANCES_SIAU)
     # id, row
-    onUpdateItemEvent = pyqtSignal(int, int)
-    onDeleteItemEvent = pyqtSignal(int, int)
-    onCreateItemEvent = pyqtSignal(int, int)
+    onUpdateItemEvent = pyqtSignal(int, list)
+    onDeleteItemEvent = pyqtSignal(int)
+    onCreateItemEvent = pyqtSignal(list)
 
     def connect_signals(self):
         self.menuEntidades.triggered.connect(lambda x: self.onOptionChoosed(x))
 
     def onUpdate(self, id, row):
         print("UPDATE", id, row)
+        print(self.getData(row))
         pass
 
     def onDelete(self, id, row):
@@ -41,7 +42,24 @@ class SiauView(QWidget):
 
     def onCreate(self, id, row):
         print("CREATE", id, row)
+        data = self.getData(row)
+        self.onCreateItemEvent.emit(data)
         pass
+
+    def getData(self, row):
+        row_items = []
+        for col in range(1, self.table.columnCount() - 1):
+            item = self.table.cellWidget(row, col).layout().itemAt(0).widget()
+            row_items.append(item)
+        data = []
+        for widget in row_items:
+            value = None
+            if isinstance(widget, QLineEdit):
+                value = widget.text()
+            elif isinstance(widget, QCheckBox):
+                value = widget.isChecked()
+            data.append(value)
+        return data
 
     def onOptionChoosed(self, action):
         value = None

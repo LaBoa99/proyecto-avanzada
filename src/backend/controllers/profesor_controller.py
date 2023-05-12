@@ -32,17 +32,17 @@ class ProfesorController(Entity, IController):
         return jsonify({"data": profesores})
 
     @staticmethod
-    @Validators.validate_resquest_body(columns)
+    @Validators.validate_resquest_body(columns, update=False)
     def add():
         controller = ProfesorController()
-        profesores = controller.create(request.data)
+        profesores = controller.create(request.get_json())
         return jsonify({"data": profesores})
 
     @staticmethod
     @Validators.validate_resquest_body(columns, update=True)
     def updateWithID(id: int):
         controller = ProfesorController()
-        profesor = controller.update(id, request.data)
+        profesor = controller.update(id, request.get_json())
         return jsonify({"data": profesor})
 
     @staticmethod

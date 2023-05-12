@@ -38,14 +38,14 @@ class MateriaController(Entity, IController):
     @Validators.validate_resquest_body(columns)
     def add():
         controller = MateriaController()
-        materias = controller.create(request.data)
+        materias = controller.create(request.get_json())
         return jsonify({"data": materias})
 
     @staticmethod
     @Validators.validate_resquest_body(columns, update=True)
     def updateWithID(id: int):
         controller = MateriaController()
-        materia = controller.update(id, request.data)
+        materia = controller.update(id, request.get_json())
         return jsonify({"data": materia})
 
     @staticmethod

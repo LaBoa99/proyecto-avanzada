@@ -30,9 +30,7 @@ class Sql:
             conexion.begin()
             cursor: cursors.Cursor = conexion.cursor()
             with cursor:
-                for values in update_values:
-                    cursor.execute(query, values + where_values.values())
-                    pass
+                cursor.execute(query, list(update_values) + list(where_values.values()))
                 conexion.commit()
 
     @staticmethod
