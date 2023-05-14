@@ -1,7 +1,7 @@
 from utils.vars import BACKEND_URL
 from utils.options import COL_INSTANCES, INSTANCES_SIAU, MENU_SIAU
 import requests
-
+import json
 
 class Service:
     def __init__(self) -> None:
@@ -9,16 +9,20 @@ class Service:
         self.url = ""
 
     def getAll(self):
-        print("url", self.url)
         response = requests.get(self.url)
+        return self.__getValue(response)
+    
+    def getAllGeneric(self, instance_name: str):
+        response = requests.get(f"{BACKEND_URL}{instance_name}")
         return self.__getValue(response)
 
     def create(self, data):
-        response = requests.post(self.url, data)
+        response = requests.post(self.url, json=data)
         return self.__getValue(response)
 
     def update(self, id, data):
-        response = requests.put(f"{self.url}{id}", data)
+        print("actualizando", id, data)
+        response = requests.put(f"{self.url}{id}", json=data)
         return self.__getValue(response)
 
     def getOne(self, id):

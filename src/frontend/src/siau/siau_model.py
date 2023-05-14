@@ -10,3 +10,7 @@ class SiauModel:
         for i, key in enumerate(keys):
             result[key] = data[i]
         return result
+    
+    def getIds(self, entity_name):
+        data = self.service.getAllGeneric(entity_name)
+        return list(map(lambda d: d['id'], data)) if data != None else []

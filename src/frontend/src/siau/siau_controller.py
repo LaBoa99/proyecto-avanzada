@@ -17,13 +17,16 @@ class SiauController:
     def create(self, data):
         result = self.model.rowToDict(data)
         self.model.service.create(result)
-        pass
+        self.refresh()
 
     def update(self, id, data):
-        pass
+        result = self.model.rowToDict(data)
+        self.model.service.update(id, result)
+        self.refresh()
 
     def delete(self, id):
-        pass
+        self.model.service.delete(id)
+        self.refresh()
 
     def change_table(self, option: INSTANCES_SIAU):
         if option == INSTANCES_SIAU.CREDITOS:
@@ -40,3 +43,6 @@ class SiauController:
                 print(data["msg"])
             else:
                 print("Incorrect Response")
+                
+    def refresh(self):
+        self.change_table(self.model.service.instance)

@@ -20,6 +20,7 @@ class Sql:
     def destroy(instance: str, id: int):
         query = f"DELETE FROM {instance} WHERE id = '{id}'"
         with Sql.__execute(query=query) as cursor:
+            cursor.execute(query)
             return {"msg": f"ENTIDAD {instance} ELIMINADA #{id}"}
 
     @staticmethod
@@ -76,5 +77,6 @@ class Sql:
                 print(query)
                 cursor = conexion.cursor()
                 cursor.execute(query)
+                conexion.commit()
                 return cursor
         raise ConnectionError("No hay conexion a base de datos")

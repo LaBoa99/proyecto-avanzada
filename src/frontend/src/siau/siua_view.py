@@ -33,12 +33,12 @@ class SiauView(QWidget):
 
     def onUpdate(self, id, row):
         print("UPDATE", id, row)
-        print(self.getData(row))
-        pass
+        data = self.getData(row)
+        self.onUpdateItemEvent.emit(id, data)
 
     def onDelete(self, id, row):
         print("DELETE", id, row)
-        pass
+        self.onDeleteItemEvent.emit(id)
 
     def onCreate(self, id, row):
         print("CREATE", id, row)

@@ -24,6 +24,13 @@ class Validators:
     def genCol(type, optional=False):
         return {"type": type, "optional": optional}
 
+COL_FK_IDS = {
+    "carrera":"carreras",
+    "centro":"centros_universitarios",
+    "coordinador": "profesores",
+    "rector": "profesores",
+    "materia": "materias",
+}
 
 COL_INSTANCES = {
     INSTANCES_SIAU.ALUMNOS: {
