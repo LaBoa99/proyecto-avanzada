@@ -20,7 +20,6 @@ class Sql:
     def destroy(instance: str, id: int):
         query = f"DELETE FROM {instance} WHERE id = '{id}'"
         with Sql.__execute(query=query) as cursor:
-            cursor.execute(query)
             return {"msg": f"ENTIDAD {instance} ELIMINADA #{id}"}
 
     @staticmethod
@@ -43,9 +42,9 @@ class Sql:
             conexion.begin()
             cursor: cursors.Cursor = conexion.cursor()
             with cursor:
-                for values in insert_values:
-                    cursor.execute(query, values)
-                    last_ids.append(cursor.lastrowid)
+                print(insert_values)
+                cursor.execute(query, insert_values)
+                last_ids.append(cursor.lastrowid)
                 conexion.commit()
         return last_ids
 

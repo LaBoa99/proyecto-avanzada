@@ -1,5 +1,5 @@
 from utils.vars import BACKEND_URL
-from utils.options import COL_INSTANCES, INSTANCES_SIAU, MENU_SIAU
+from utils.options import COL_INSTANCES, INSTANCES_SIAU
 import requests
 import json
 
@@ -21,7 +21,6 @@ class Service:
         return self.__getValue(response)
 
     def update(self, id, data):
-        print("actualizando", id, data)
         response = requests.put(f"{self.url}{id}", json=data)
         return self.__getValue(response)
 

@@ -35,12 +35,12 @@ class Entity:
 
     def create(self, data):
         col_names = [elemento for elemento in self.columns_names if elemento != "id"]
-        return Sql.create(self.instance_name, col_names, data.values())
+        return Sql.create(self.instance_name, col_names, list(data.values()))
 
     def update(self, id: int, data):
         col_names = [elemento for elemento in self.columns_names if elemento != "id"]
         if Validators.check_id(id):
-            return Sql.update(self.instance_name, col_names, data.values(), {"id": id})
+            return Sql.update(self.instance_name, col_names, list(data.values()), {"id": id})
 
     def destroy(self, id: int):
         if Validators.check_id(id):

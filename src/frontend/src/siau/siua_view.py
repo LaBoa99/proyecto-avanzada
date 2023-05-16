@@ -18,6 +18,8 @@ from PyQt6.QtWidgets import (
     QCheckBox,
     QPushButton,
     QHeaderView,
+    QComboBox,
+    QMessageBox,
 )
 
 
@@ -32,19 +34,18 @@ class SiauView(QWidget):
         self.menuEntidades.triggered.connect(lambda x: self.onOptionChoosed(x))
 
     def onUpdate(self, id, row):
-        print("UPDATE", id, row)
         data = self.getData(row)
         self.onUpdateItemEvent.emit(id, data)
 
     def onDelete(self, id, row):
-        print("DELETE", id, row)
         self.onDeleteItemEvent.emit(id)
 
     def onCreate(self, id, row):
-        print("CREATE", id, row)
         data = self.getData(row)
         self.onCreateItemEvent.emit(data)
-        pass
+        
+    def setHeader(self, title):
+        self.parent_window.setWindowTitle("Proyecto Programacion Avanzada - " + title)
 
     def getData(self, row):
         row_items = []
@@ -58,9 +59,14 @@ class SiauView(QWidget):
                 value = widget.text()
             elif isinstance(widget, QCheckBox):
                 value = widget.isChecked()
+            elif isinstance(widget, QComboBox):
+                value = widget.currentData()
             data.append(value)
         return data
 
+    def setExtras(self, extras):
+        self.extras = extras
+    
     def onOptionChoosed(self, action):
         value = None
         match action:
@@ -87,26 +93,30 @@ class SiauView(QWidget):
         for i, col in enumerate(cols_names):
             self.table.insertColumn(i)
             self.table.setHorizontalHeaderItem(i, QTableWidgetItem(col))
-        self.addRow(cols)
+        self.setInputRow(cols)
+        
+    def setInputRow(self, cols):
+        colIndex = 0
+        self.table.setRowCount(2)
+        for col, value in cols.items():
+            control = self.genInputCell(col, cols[col]["type"], None)
+            self.table.setCellWidget(0, colIndex, control)
+            self.table.setRowHeight(0, 50)
+            colIndex += 1
+        self.table.setCellWidget(0, colIndex, self.genButtonCell(0, 0))
 
     def setRows(self, cols, rows):
         self.addRow(cols, rows)
 
     def addRow(self, cols, rows: list[dict] = []):
         colIndex = 0
-        self.table.setRowCount(len(rows) + 1)
-        for col, value in cols.items():
-            control = self.genInputCell(cols[col]["type"], None)
-            self.table.setCellWidget(0, colIndex, control)
-            self.table.setRowHeight(0, 50)
-            colIndex += 1
-        self.table.setCellWidget(0, colIndex, self.genButtonCell(0, 0))
         rowIndex = 1
-        if len(rows):
+        self.table.setRowCount(len(rows) + 1)
+        if len(rows) > 0:
             for instance in rows:
                 colIndex = 0
                 for col, value in instance.items():
-                    control = self.genInputCell(cols[col]["type"], value)
+                    control = self.genInputCell(col, cols[col]["type"], value)
                     self.table.setCellWidget(rowIndex, colIndex, control)
                     self.table.setRowHeight(rowIndex, 50)
                     colIndex += 1
@@ -115,24 +125,34 @@ class SiauView(QWidget):
                 )
                 rowIndex += 1
 
-    def genInputCell(self, type, value=None):
+    def genInputCell(self, col, col_type, value=None):
         input = None
         layout = QHBoxLayout()
         widget = QWidget()
-        if type == int:
+        if isinstance(col_type, list) or col.endswith("_id"):
+            instances = self.extras[col]
+            input = QComboBox(widget)
+            for instance in instances:
+                input.addItem(instance["nombre"], instance["id"])
+            if value != None:
+                index = [i for i, elemento in enumerate(self.extras[col]) if elemento["id"] == value][0] if len(self.extras[col]) else 0
+                input.setCurrentIndex(index)
+            # asignar labels
+        if col_type == int:
             input = QLineEdit()
             validator = QIntValidator(1, 100)
             input.setValidator(validator)
-            print("Value", value)
+            input.setDisabled(col == "id")
             input.setText(str(value) if value != None else "")  # type: ignore
-        if type == str:
+        if col_type == str:
             input = QLineEdit()
             input.setText(str(value) if value != None else "")
-        if type == bool:
+        if col_type == bool:
             input = QCheckBox()
             if value != None:
                 input.setChecked(value)
-        layout.addWidget(input)  # type: ignore
+        if input != None:
+            layout.addWidget(input)  # type: ignore
         widget.setLayout(layout)
         return widget
 
@@ -155,8 +175,16 @@ class SiauView(QWidget):
         widget = QWidget()
         widget.setLayout(layout)
         return widget
+    
+    def showCredits(self):
+        alert = QMessageBox()
+        alert.setWindowTitle("Aviso")
+        alert.setText("Programa elaborado por Claudio, Christopher y Jezreel")
+        alert.setIcon(QMessageBox.Icon.Information)
+        alert.exec()
 
     def setupUi(self, SIAU):
+        self.extras = {}
         SIAU.setObjectName("SIAU")
         SIAU.resize(1043, 673)
         self.centralwidget = QtWidgets.QWidget(parent=SIAU)
@@ -207,6 +235,7 @@ class SiauView(QWidget):
 
     def retranslateUi(self, SIAU):
         _translate = QtCore.QCoreApplication.translate
+        self.parent_window = SIAU
         SIAU.setWindowTitle(_translate("SIAU", "Proyecto Avanzada SIAU"))
         self.menuEntidades.setTitle(_translate("SIAU", "Entidades"))
         self.actionAlumnos.setText(_translate("SIAU", "Alumnos"))

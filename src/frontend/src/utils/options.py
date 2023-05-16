@@ -1,15 +1,5 @@
 from enum import Enum
 
-
-class MENU_SIAU(Enum):
-    ALUMNOS = 1
-    PROFESORES = 2
-    MATERIAS = 3
-    CARRERAS = 4
-    CENTROS_UNIVERSITARIOS = 5
-    CREDITOS = 6
-
-
 class INSTANCES_SIAU(Enum):
     ALUMNOS = "alumnos"
     PROFESORES = "profesores"
@@ -29,6 +19,7 @@ COL_FK_IDS = {
     "centro":"centros_universitarios",
     "coordinador": "profesores",
     "rector": "profesores",
+    "profesor": "profesores",
     "materia": "materias",
 }
 
@@ -38,8 +29,8 @@ COL_INSTANCES = {
         "codigo": Validators.genCol(int),
         "nombre": Validators.genCol(str),
         "situacion": Validators.genCol(bool, True),
-        "centro_id": Validators.genCol(int),
-        "carrera_id": Validators.genCol(int),
+        "centro_id": Validators.genCol(list),
+        "carrera_id": Validators.genCol(list),
     },
     INSTANCES_SIAU.PROFESORES: {
         "id": {"type": int, "optional": True},
@@ -55,20 +46,36 @@ COL_INSTANCES = {
         "creditos": Validators.genCol(int),
         "cupo_disponible": Validators.genCol(int, True),
         "cupo": Validators.genCol(int),
-        "carrera_id": Validators.genCol(int),
-        "materia_id": Validators.genCol(int),
+        "carrera_id": Validators.genCol(list),
+        "profesor_id": Validators.genCol(list),
     },
     INSTANCES_SIAU.CARRERAS: {
         "id": {"type": int, "optional": True},
         "nombre": Validators.genCol(str),
         "descripcion": Validators.genCol(str, True),
-        "coordinador_id": Validators.genCol(int, True),
+        "coordinador_id": Validators.genCol(list, True),
     },
     INSTANCES_SIAU.CENTROS_UNIVERSITARIOS: {
         "id": {"type": int, "optional": True},
         "nombre": Validators.genCol(str),
         "ubicacion": Validators.genCol(str, True),
         "descripcion": Validators.genCol(str, True),
-        "rector_id": Validators.genCol(int, True),
+        "rector_id": Validators.genCol(list, True),
     },
+}
+
+COL_FK_INSTANCES = {
+    # Foreign keys cols
+    "carrera": INSTANCES_SIAU.CARRERAS,
+    "centro": INSTANCES_SIAU.CENTROS_UNIVERSITARIOS,
+    "coordinador": INSTANCES_SIAU.PROFESORES,
+    "rector": INSTANCES_SIAU.PROFESORES,
+    "profesor": INSTANCES_SIAU.PROFESORES,
+    "materia": INSTANCES_SIAU.MATERIAS,
+    # Input rows
+    "alumnos": INSTANCES_SIAU.ALUMNOS,
+    "profesores": INSTANCES_SIAU.PROFESORES,
+    "materias": INSTANCES_SIAU.MATERIAS,
+    "centros_universitarios": INSTANCES_SIAU.CENTROS_UNIVERSITARIOS,
+    "carreras": INSTANCES_SIAU.CARRERAS
 }

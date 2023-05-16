@@ -1,4 +1,4 @@
-from utils.options import COL_INSTANCES, INSTANCES_SIAU
+from utils.options import INSTANCES_SIAU
 
 
 class SiauController:
@@ -30,15 +30,17 @@ class SiauController:
 
     def change_table(self, option: INSTANCES_SIAU):
         if option == INSTANCES_SIAU.CREDITOS:
-            pass
+            self.view.showCredits()
         else:
             self.model.service.setInstance(option)
+            self.view.setExtras(self.model.getExtras())
             self.view.setColumns(self.model.service.getColumns())
             data = self.model.service.getAll()
             if "data" in data:
                 if self.model.service.instance.value in data["data"]:
-                    data = data["data"][self.model.service.instance.value]
+                    data = self.model.formatData(data, self.model.service.instance.value)
                     self.view.setRows(self.model.service.getColumns(), data)
+                    self.view.setHeader(self.model.service.instance.value)
             elif "msg" in data:
                 print(data["msg"])
             else:
